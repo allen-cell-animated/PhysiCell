@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /*
 ###############################################################################
 # If you use PhysiCell in your project, please cite PhysiCell and the version #
@@ -66,103 +64,29 @@
 #                                                                             #
 ###############################################################################
 */
--->
 
-<!--
-<user_details />
--->
+#include "../core/PhysiCell.h"
+#include "../modules/PhysiCell_standard_modules.h" 
 
-<PhysiCell_settings version="devel-version">
-	<domain>
-		<x_min>-500</x_min>
-		<x_max>500</x_max>
-		<y_min>-500</y_min>
-		<y_max>500</y_max>
-		<z_min>-10</z_min>
-		<z_max>10</z_max>
-		<dx>20</dx>
-		<dy>20</dy>
-		<dz>20</dz>
-		<use_2D>true</use_2D>
-	</domain>
+using namespace BioFVM; 
+using namespace PhysiCell;
 
-	<overall>
-		<max_time units="min">28800</max_time> <!-- 20 days -->
-		<time_units>min</time_units>
-		<space_units>micron</space_units>
+void tumor_cell_phenotype_with_oncoprotein( Cell* pCell, Phenotype& phenotype, double dt ); 
 
-		<dt_diffusion units="min">0.01</dt_diffusion>
-		<dt_mechanics units="min">0.1</dt_mechanics>
-		<dt_phenotype units="min">6</dt_phenotype>
-	</overall>
+// any additional cell types (beyond cell_defaults)
 
-	<parallel>
-		<omp_num_threads>4</omp_num_threads>
-	</parallel>
+extern Cell_Definition motile_cell; 
 
-	<save>
-		<folder>output</folder> <!-- use . for root -->
+// custom cell phenotype functions could go here 
 
-		<full_data>
-			<interval units="min">360</interval>
-			<enable>true</enable>
-		</full_data>
+// setup functions to help us along 
 
-		<SVG>
-			<interval units="min">60</interval>
-			<enable>true</enable>
-		</SVG>
+void create_cell_types( void );
+void setup_tissue( void ); 
 
-		<legacy_data>
-			<enable>false</enable>
-		</legacy_data>
-	</save>
+// set up the BioFVM microenvironment 
+void setup_microenvironment( void ); 
 
-	<microenvironment_setup>
-		<variable name="oxygen" units="mmHg" ID="0">
-			<physical_parameter_set>
-				<diffusion_coefficient units="micron^2/min">100000.0</diffusion_coefficient>
-				<decay_rate units="1/min">0.1</decay_rate>
-			</physical_parameter_set>
-			<initial_condition units="mmHg">38.0</initial_condition>
-			<Dirichlet_boundary_condition units="mmHg" enabled="true">38.0</Dirichlet_boundary_condition>
-		</variable>
+// custom pathology coloring function 
 
-		<options>
-			<calculate_gradients>false</calculate_gradients>
-			<track_internalized_substrates_in_each_agent>false</track_internalized_substrates_in_each_agent>
-			<!-- not yet supported -->
-			<initial_condition type="matlab" enabled="false">
-				<filename>./config/initial.mat</filename>
-			</initial_condition>
-			<!-- not yet supported -->
-			<dirichlet_nodes type="matlab" enabled="false">
-				<filename>./config/dirichlet.mat</filename>
-			</dirichlet_nodes>
-		</options>
-	</microenvironment_setup>
-
-	<user_parameters>
-		<random_seed type="int" units="dimensionless">0</random_seed>
-		<!-- example parameters from the template -->
-
-		<!-- motile cell type parameters -->
-		<motile_cell_persistence_time type="double" units="min">15</motile_cell_persistence_time>
-		<motile_cell_migration_speed type="double" units="micron/min">0.25</motile_cell_migration_speed>
-		<motile_cell_relative_adhesion type="double" units="dimensionless">0.05</motile_cell_relative_adhesion>
-		<motile_cell_apoptosis_rate type="double" units="1/min">0.0</motile_cell_apoptosis_rate>
-		<motile_cell_relative_cycle_entry_rate type="double" units="dimensionless">0.1</motile_cell_relative_cycle_entry_rate>
-
-		<!-- for the tutorial -->
-		<motile_color type="string" units="dimensionless">darkorange</motile_color>
-		<base_cycle_entry_rate type="double" units="1/min">0.0025</base_cycle_entry_rate>
-		<base_apoptosis_rate type="double" units="1/min">1e-7</base_apoptosis_rate>
-		<base_cell_adhesion_distance type="double" units="dimensionless">2.5</base_cell_adhesion_distance>
-		<include_motile_cell type="bool" units="dimensionless">true</include_motile_cell>
-
-		<!-- custom edits -->
-		<n_seed_cells type="double" units="cells">30</n_seed_cells>
-		<percent_motile_cells type="double" units="%">10</percent_motile_cells>
-	</user_parameters>
-
-</PhysiCell_settings>
+std::vector<std::string> my_coloring_function( Cell* );
