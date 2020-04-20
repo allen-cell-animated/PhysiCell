@@ -139,6 +139,10 @@ void create_cell_types( void )
 	cell_defaults.phenotype.mechanics.set_relative_maximum_adhesion_distance(
 	     parameters.doubles("base_cell_adhesion_distance") );
 
+    // Set cell-cell adhesion to 5% of other cells
+	cell_defaults.phenotype.mechanics.cell_cell_adhesion_strength = parameters.doubles( "base_cell_adhesion_strength" ); // 0.05;
+
+
 	// Now, let's define another cell type.
 	// It's best to just copy the default and modify it.
 
