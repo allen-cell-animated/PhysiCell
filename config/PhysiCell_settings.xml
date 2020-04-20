@@ -163,6 +163,7 @@
 		<!-- custom edits -->
 		<n_seed_cells type="double" units="cells">30</n_seed_cells>
 		<percent_motile_cells type="double" units="%">10</percent_motile_cells>
+        <base_cell_adhesion_strength type="double" > 0.1 </base_cell_adhesion_strength>
 	</user_parameters>
 
 </PhysiCell_settings>
